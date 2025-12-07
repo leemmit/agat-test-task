@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 import L from "leaflet";
 import "./style.css";
@@ -8,7 +8,8 @@ import { AppDispatch } from "./store";
 import { startLoading, setShapes, setError } from "./components/shapesSlice";
 import { ShapeCollection } from "./types";
 import ShapesRenderer from "./components/ShapesRenderer";
-
+import Sidebar from "./components/Sidebar";
+import { IoIosArrowBack, IoIosArrowForward  } from "react-icons/io";
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -20,6 +21,7 @@ L.Icon.Default.mergeOptions({
 
 export default function App() {
   const dispatch = useDispatch<AppDispatch>();
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
   useEffect(() => {
     dispatch(startLoading());
@@ -39,9 +41,26 @@ export default function App() {
 
   return (
     <div id="app-root" style={{ display: "flex", height: "100vh" }}>
-      <div style={{ width: 300, background: "#fff", padding: 12 }}>
-        <h3>Sidebar</h3>
-      </div>
+      <button
+        onClick={() => setIsSidebarVisible(!isSidebarVisible)}
+        style={{
+          position: "fixed",
+          top: "calc(50vh - 40px)",
+          left: "0px",
+          zIndex: 1001,
+          background: "#fff",
+          border: "none",
+          borderRadius: "4px",
+          padding: "30px 5px",
+          cursor: "pointer",
+          // boxShadow: "0 0 4px rgba(0,0,0,0.7)",
+          transform: isSidebarVisible ? "translateX(240px)" : "translateX(0)",
+          transition: "transform 0.3s ease",
+        }}
+        title={isSidebarVisible ? "Закрыть" : "Открыть"}
+      >
+        {isSidebarVisible ? <IoIosArrowBack size={20} /> : <IoIosArrowForward size={20} />}
+      </button>
 
       <div style={{ flex: 1 }}>
         <MapContainer center={[55, 37]} zoom={5} style={{ height: "100%", width: "100%" }}>
@@ -49,6 +68,8 @@ export default function App() {
           <ShapesRenderer />
         </MapContainer>
       </div>
+
+      <Sidebar isVisible={isSidebarVisible} />
     </div>
   );
 }
