@@ -1,9 +1,12 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+* { 
+  box-sizing: border-box; margin: 0; padding: 0; 
 }
-
-#map-id {
-  height: 100vh;
+html, body, #root { 
+  height: 100%; 
+}
+#app-root { 
+  height: 100%; 
+}
+.leaflet-container { 
+  background: #e6f0f3; 
 }
