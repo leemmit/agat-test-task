@@ -9,8 +9,8 @@ interface ButtonProps {
   textColor?: string;
   hoverColor?: string;
   hoverTextColor?: string;
+  style?: React.CSSProperties;  // Новый проп для дополнительных inline-стилей
 }
-
 
 const Button: React.FC<ButtonProps> = ({
   children,
@@ -21,6 +21,7 @@ const Button: React.FC<ButtonProps> = ({
   textColor,
   hoverColor,
   hoverTextColor,
+  style: additionalStyle,  // Переименовал для ясности
 }) => {
   
   const [isHovered, setIsHovered] = useState<boolean>(false);
@@ -28,7 +29,7 @@ const Button: React.FC<ButtonProps> = ({
   const handleMouseEnter = () => setIsHovered(true);
   const handleMouseLeave = () => setIsHovered(false);
 
-  const style: React.CSSProperties = {
+  const defaultStyle: React.CSSProperties = {
     padding: "0px",
     cursor: "pointer",
     background: isHovered ? (hoverColor || bgColor) : bgColor,
@@ -39,12 +40,14 @@ const Button: React.FC<ButtonProps> = ({
     transition: "background 0.2s ease",
   };
 
+  const combinedStyle = { ...defaultStyle, ...(additionalStyle || {}) };
+
   return (
     <button
       onClick={onClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      style={style}
+      style={combinedStyle}
     >
       {children}
     </button>

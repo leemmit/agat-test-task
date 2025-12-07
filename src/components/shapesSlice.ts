@@ -25,8 +25,17 @@ const shapesSlice = createSlice({
       state.items = action.payload;
       state.loading = false;
     },
-    addShape(state, action: PayloadAction<ShapeFeature>) {
-      state.items.push(action.payload);
+    addShape(state, action: PayloadAction<{ id: number; name: string; lat: number; lng: number }>) {
+      const { id, name, lat, lng } = action.payload;
+
+      state.items.push({
+        type: "Feature",
+        properties: { id, name },
+        geometry: {
+          type: "Point",
+          coordinates: [lng, lat],
+        },
+      });
     },
     removeShape(state, action: PayloadAction<number>) {
       state.items = state.items.filter(
